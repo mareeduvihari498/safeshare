@@ -5,6 +5,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FirebaseRecaptchaVerifier, FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import * as MediaLibrary from 'expo-media-library';
 import * as firebase from 'firebase';
 import Textinput from './Textinput';
 import * as Cellular from 'expo-cellular';
@@ -14,6 +15,7 @@ import Photogallery from './photogallery';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import firebaseConfig from './firebase';
+import album from './albums';
 import {
   AdMobBanner,
   AdMobInterstitial,
@@ -263,16 +265,17 @@ return (
 
 }
 
-async function generatealbum(){
+/*async function generatealbum(){
   if(load){
     return;
   }
-  console.log("called permissions")
-const {sp}= await Permissions.askAsync(Permissions.CAMERA_ROLL)
+  console.log("genrating albums")
+//const {sp}= await Permissions.askAsync(Permissions.CAMERA_ROLL)
 
 
 
 const albums = await MediaLibrary.getAlbumsAsync()
+console.log(albums)
 const listOfTitles = albums.map(album => album.title);
 
 const listofid = albums.map(album => album.id);
@@ -300,32 +303,17 @@ setload(true)
 }
 
 
-}
+}*/
 
 function photos({navigation}){
   <Photogallery  id={pid} title={ptitle} type={type} />
 }
 
 function albums({navigation}){
-  generatealbum();
-  return(
-    <View style={{flex:1}}>
-      <FlatList numColumns={2} data={titles} style={{flex:1}} keyExtractor={(item) => item.id}  renderItem={ ({item,index}) => (
-        <View style={{flex:0.5,borderWidth:1}}>
-          <TouchableHighlight onPress={() => {setphotos(item.id,item.title); navigation.navigate('photos');}}>
-      <ImageBackground source={item} style={{width:width/2,height:width/2,borderWidth:1,borderColor: 'grey'}}  resizeMode='cover'  >
-      <View style={styles.aname} >
-        <Text  >{item.title}</Text>
-      </View>
-      </ImageBackground>
-      </TouchableHighlight>
-      </View>
-      
+  <album />
 
-      )}/>
-    </View>
-    
-  )
+
+  
 }
 
  function Homescreen({navigation}){
