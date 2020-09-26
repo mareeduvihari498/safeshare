@@ -11,11 +11,11 @@ import Textinput from './Textinput';
 import * as Cellular from 'expo-cellular';
 import * as SecureStore from 'expo-secure-store';
 import countrycode from './countrycode';
-import Photogallery from './photogallery';
+import Photogallery  from './photogallery';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import firebaseConfig from './firebase';
-import album from './albums';
+import Album from './album';
 import {
   AdMobBanner,
   AdMobInterstitial,
@@ -30,15 +30,6 @@ import {
 export default function App() {
   
   const [type,settype]= useState()
-  const[pic,setpic] =useState({uri:'file:///storage/emulated/0/Download/IMG_20190706_162737.jpg'})
-  const [alb,setalb]=useState([])
-  const width= Dimensions.get('screen').width;
-  const heigth= Dimensions.get('screen').height;
-  const [titles,settitles]= useState([])
-  const [ptitle,setptitle]=useState();
-  const [pid,setpid] = useState();
-  const [load,setload] = useState(false);
-  const [pload,setpload] = useState('f');
   const [modalVisible, setModalVisible] = useState(false);
   const [dummy,setdummy]=useState('set')
   const phonecode = countrycode[Cellular.isoCountryCode]
@@ -265,53 +256,16 @@ return (
 
 }
 
-/*async function generatealbum(){
-  if(load){
-    return;
-  }
-  console.log("genrating albums")
-//const {sp}= await Permissions.askAsync(Permissions.CAMERA_ROLL)
 
-
-
-const albums = await MediaLibrary.getAlbumsAsync()
-console.log(albums)
-const listOfTitles = albums.map(album => album.title);
-
-const listofid = albums.map(album => album.id);
-
-
-for(let i=0;i<listOfTitles.length;i++){
- 
-const firs = await MediaLibrary.getAssetsAsync({album:listofid[i],first:1,sortBy:[[MediaLibrary.SortBy.creationTime,false]] })
-//console.log(firs.assets[0].uri)
-//const firs = await MediaLibrary.getAssetsAsync({album:listofid[i],first:1,})
-if(firs.totalCount>0){
-console.log(firs.assets[0].uri)
-const tt= listOfTitles[i]
-
-const ph={
-  uri:firs.assets[0].uri,
-  title:tt,
-  id:listofid[i],
-  
-}
-
-settitles(currentitle => [...currentitle,ph]);
-setload(true)
-}
-}
-
-
-}*/
 
 function photos({navigation}){
   <Photogallery  id={pid} title={ptitle} type={type} />
 }
 
 function albums({navigation}){
-  <album />
-
+  return(
+    <Album />
+  )
 
   
 }
@@ -382,8 +336,28 @@ function login(){
   return false
 }
 
+async function genratealbums(){
+  //const {sp}= await Permissions.askAsync(Permissions.CAMERA_ROLL)
+      
+      
+      
+      
+      try
+      {
+        const albums= await MediaLibrary.getAlbumsAsync()
+        const listOfTitles = albums.map(album => album.title);
+      
+        const listofid = albums.map(album => album.id);
+
+        console.log(listOfTitles)
+      }
+      catch(e){
+        console.log(e)
+      }
+}
+
   
-  apno()
+ /* apno()
   if(ksignin){
     if(klogin){
       return(
@@ -424,8 +398,13 @@ function login(){
 
    
  </NavigationContainer>
- );
+ );*/
  
+ return(
+   <View style={styles.container}>
+     <Button title='pics' onPress={genratealbums} />
+   </View>
+ )
  
  
   

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState }  from 'react';
 import { Button, StyleSheet, Text, View,TextInput, Keyboard, Dimensions, Alert,Modal,TouchableHighlight,FlatList } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import * as Permissions from 'expo-permissions';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import Constants from 'expo-constants';
 
 
 
-const album = props =>{
+const Album = props =>{
 
-    const [type,settype]= useState()
-  //const[pic,setpic] =useState({uri:'file:///storage/emulated/0/Download/IMG_20190706_162737.jpg'})
+    
   const[pic,setpic]= useState()
   const [alb,setalb]=useState([])
   const width= Dimensions.get('screen').width;
@@ -19,18 +19,19 @@ const album = props =>{
   const [pid,setpid] = useState();
   const [load,setload] = useState(false);
   const [pload,setpload] = useState('f');
+  const navigation=useNavigation();
 
     async function generatealbum(){
         if(load){
           return;
         }
         console.log("genrating albums")
-      //const {sp}= await Permissions.askAsync(Permissions.CAMERA_ROLL)
+      const {sp}= await Permissions.askAsync(Permissions.CAMERA_ROLL)
       
       
       
       const albums = await MediaLibrary.getAlbumsAsync()
-      console.log(albums)
+      //console.log(albums)
       const listOfTitles = albums.map(album => album.title);
       
       const listofid = albums.map(album => album.id);
@@ -59,9 +60,20 @@ const album = props =>{
       
 }
 
-generatealbum();
+//generatealbum();
+React.useEffect(() => {
+  const unsubscribe = navigation.addListener('focus', () => {
+    // The screen is focused
+    // Call any action
+    generatealbum()
+  });
+
+  // Return the function to unsubscribe from the event so it gets removed on unmount
+  return unsubscribe;
+}, [navigation]);
   return(
-    <View style={{flex:1}}>
+
+    /*<View style={{flex:1}}>
       <FlatList numColumns={2} data={titles} style={{flex:1}} keyExtractor={(item) => item.id}  renderItem={ ({item,index}) => (
         <View style={{flex:0.5,borderWidth:1}}>
           <TouchableHighlight onPress={() => {setphotos(item.id,item.title); navigation.navigate('photos');}}>
@@ -75,6 +87,10 @@ generatealbum();
       
 
       )}/>
+    </View>*/
+
+    <View>
+      <Text> Entereed Albums</Text>
     </View>
     
   )
@@ -102,4 +118,4 @@ const styles = StyleSheet.create({
   });
 
 
-  export default album;
+  export default Album
