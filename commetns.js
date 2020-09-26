@@ -136,3 +136,29 @@ const [ptitle,setptitle]=useState();
 const [pid,setpid] = useState();
 const [load,setload] = useState(false);
 const [pload,setpload] = useState('f');
+
+
+
+
+
+function options({navigation}){
+  return (
+  <View style={styles.container}>
+   <Button title={'upload photo'} onPress={()=>{
+     settype('photo');navigation.navigate('albums')
+   }} />
+   <Button title={'upload video'}  onPress={()=>{
+     settype('video');navigation.navigate('albums')
+   }} />
+   <Button title={'upload audio'}  onPress={()=>{
+     settype('audio');navigation.navigate('albums')
+   }} />
+   <Button title={'upload others'}  onPress={()=>{
+     settype('unknown');navigation.navigate('albums')
+   }} />
+   <Button title='change pin' />
+   <Button title='signout' />
+   </View>
+   )
+
+ }

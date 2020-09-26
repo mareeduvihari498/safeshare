@@ -15,6 +15,7 @@ import Photogallery  from './photogallery';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import firebaseConfig from './firebase';
+import Options from './Options'
 import Album from './album';
 import {
   AdMobBanner,
@@ -247,9 +248,9 @@ function pin ({navigation}){
   
  
 return (
-
+<View style={styles.container}>
 <Textinput />
-
+</View>
 )
  
   
@@ -264,7 +265,7 @@ function photos({navigation}){
 
 function albums({navigation}){
   return(
-    <Album />
+    <Options />
   )
 
   
@@ -283,27 +284,17 @@ function albums({navigation}){
 
  }
  function options({navigation}){
-  return (
-  <View style={styles.container}>
-   <Button title={'upload photo'} onPress={()=>{
-     settype('photo');navigation.navigate('albums')
-   }} />
-   <Button title={'upload video'}  onPress={()=>{
-     settype('video');navigation.navigate('albums')
-   }} />
-   <Button title={'upload audio'}  onPress={()=>{
-     settype('audio');navigation.navigate('albums')
-   }} />
-   <Button title={'upload others'}  onPress={()=>{
-     settype('unknown');navigation.navigate('albums')
-   }} />
-   <Button title='change pin' />
+   return(
+
+     <View style={styles.container}>
+       <Button title='upload' onPress={()=>{
+         navigation.navigate('albums')
+       }} />
+         <Button title='change pin' />
    <Button title='signout' />
-   </View>
+     </View>
    )
-
  }
-
  function camera(){
   return(
     <View>
@@ -357,7 +348,7 @@ async function genratealbums(){
 }
 
   
- /* apno()
+  apno()
   if(ksignin){
     if(klogin){
       return(
@@ -398,13 +389,7 @@ async function genratealbums(){
 
    
  </NavigationContainer>
- );*/
- 
- return(
-   <View style={styles.container}>
-     <Button title='pics' onPress={genratealbums} />
-   </View>
- )
+ );
  
  
   
