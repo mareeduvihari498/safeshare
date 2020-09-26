@@ -1,6 +1,13 @@
 {
   "expo": {
     "name": "confused",
+    "android": {
+      
+      "config": {
+        
+        "googleMobileAdsAppId": "ca-app-pub-7473145676264533~2275577923" // sample id, replace with your own
+      }
+    },
     "slug": "confused",
     "version": "1.0.0",
     "orientation": "portrait",
