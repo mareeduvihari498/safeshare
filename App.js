@@ -15,8 +15,11 @@ import Photogallery  from './photogallery';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import firebaseConfig from './firebase';
+import { Entypo } from '@expo/vector-icons';
+import { Camera } from 'expo-camera';
 import Options from './Options'
 import Album from './album';
+import * as ImagePicker from 'expo-image-picker';
 import {
   AdMobBanner,
   AdMobInterstitial,
@@ -24,6 +27,7 @@ import {
   AdMobRewarded,
   setTestDeviceIDAsync,
 } from 'expo-ads-admob';
+import { withNativeAd } from 'expo-ads-facebook';
 
 
 
@@ -40,6 +44,29 @@ export default function App() {
   const [cpublicpin, setcpublicpin]=useState();
   const [klogin,setklogin]=useState(true);
   const[ksignin,setksignin]=useState('set')
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: false,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+      const f = await fetch(result.uri);
+      const b = await f.blob();
+      const k =firebase.storage().ref('images/confues.jpg').put(b).on(
+          'state_changed', async()=>{
+              const k1 =await firebase.storage().ref('images/confues.jpg').getDownloadURL()
+              console.log(k1)
+              setImage(k1)
+          }
+      )
+    }
+  };
   
   const ref = React.useRef(null);
   const apno =async()=>{ 
@@ -64,7 +91,7 @@ console.log(ksignin)
   }
   
 
- 
+  const [cameraRef, setCameraRef] = useState(null)
   const stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
   const [PhoneNumber,setPhoneNumber] = useState();
@@ -284,22 +311,58 @@ function albums({navigation}){
 
  }
  function options({navigation}){
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+  
    return(
+     
 
-     <View style={styles.container}>
-       <Button title='upload' onPress={()=>{
-         navigation.navigate('albums')
-       }} />
+     <View style={{flex:1,justifyContent:"center"}}>
+       <Button title='upload' onPress={pickImage}  />
          <Button title='change pin' />
    <Button title='signout' />
      </View>
    )
  }
- function camera(){
+ function camera({navigation}){
+  React.useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      //setHasPermission(status === 'granted');
+    })();
+  }, []);
   return(
-    <View>
-      
+    
+    <View style={{
+      flex: 1,
+      backgroundColor: 'transparent',
+      flexDirection: 'row',
+  
+    }}>
+      <Camera style={{flex:1, flexDirection:"row" }} type={Camera.Constants.Type.back} ref={ref => {
+        setCameraRef(ref) 
+  }} >
+     
+        <View style={{flex:1, flexDirection:"row",alignItems:"center",alignContent:"center",alignSelf:"flex-end", paddingRight:50 }}>
+        <Entypo name="picasa" style={{alignContent:"center",alignSelf:"center",alignItems:"center"}} size={72} color="black" onPress={
+          ()=>{
+            console.log("taking pic")
+          }
+        } />
+        </View>
+        
+        </Camera>
+     
     </View>
+   
   )
 
  }
