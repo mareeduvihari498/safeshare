@@ -58,11 +58,11 @@ export default function App() {
       //setImage(result.uri);
       const f = await fetch(result.uri);
       const b = await f.blob();
-      const k =firebase.storage().ref('images/9494382039/confues.jpg').put(b).on(
+      const k =firebase.storage().ref('images/9494382039/confues.jpg').put(b,{'owner':'9494382039',}).on(
           'state_changed', async()=>{
               const k1 =await firebase.storage().ref('images/9494382039/confues.jpg').getDownloadURL()
               console.log(k1)
-              setImage(k1)
+              
           }
       )
     }
@@ -141,7 +141,7 @@ console.log(ksignin)
     console.log(Cellular.mobileNetworkCode)
     console.log(Cellular.mobileCountryCode)
     console.log(Cellular.isoCountryCode)
-    const vid =await pp.verifyPhoneNumber('+91'+PhoneNumber,ref.current).then(setVerificationId);
+    const vid =await pp.verifyPhoneNumber(countrycode[Cellular.isoCountryCode]+PhoneNumber,ref.current).then(setVerificationId);
     
 
 }
@@ -259,7 +259,7 @@ const [code, setCode] = useState('');
 
 function Home(){
 return(
-  <View style={styles.container}>
+  <View style={{alignContent:"flex-end"}}>
   <AdMobBanner
 bannerSize="smartBannerLandscape"
 adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
