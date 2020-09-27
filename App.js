@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Button, StyleSheet, Text, View,TextInput, Keyboard, Dimensions, Alert,Modal,TouchableHighlight,FlatList } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -55,12 +55,12 @@ export default function App() {
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      //setImage(result.uri);
       const f = await fetch(result.uri);
       const b = await f.blob();
-      const k =firebase.storage().ref('images/confues.jpg').put(b).on(
+      const k =firebase.storage().ref('images/9494382039/confues.jpg').put(b).on(
           'state_changed', async()=>{
-              const k1 =await firebase.storage().ref('images/confues.jpg').getDownloadURL()
+              const k1 =await firebase.storage().ref('images/9494382039/confues.jpg').getDownloadURL()
               console.log(k1)
               setImage(k1)
           }
@@ -321,7 +321,7 @@ function albums({navigation}){
       }
     })();
   }, []);
-  
+
    return(
      
 
